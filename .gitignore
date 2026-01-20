@@ -40,3 +40,7 @@ nb-configuration.xml
 .jpb
 **/deploy/k8s/gen
 .quarkus
+
+# Claude Code
+.claude/settings.local.json
+.mcp.json

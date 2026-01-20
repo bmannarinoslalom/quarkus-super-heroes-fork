@@ -4,6 +4,7 @@
 - [Introduction](#introduction)
 - [Building the Application](#building-the-application)
 - [Local Development](#local-development)
+- [Standalone React Development](#standalone-react-development)
 - [Integration with Microcks](#integration-with-microcks)
 - [Running the Application](#running-the-application)
 - [Running Locally via Docker Compose](#running-locally-via-docker-compose)
@@ -49,9 +50,66 @@ Use the following command:
 quarkus dev
 ```
 
-This starts both Quarkus and the React hot reloading server at http://localhost:3000. The Quarkus server supplies the `env.js` file to the Javascript front-end. 
+This starts both Quarkus and the React hot reloading server at http://localhost:3000. The Quarkus server supplies the `env.js` file to the Javascript front-end.
 
-The Quarkus server port can be changed in the usual way, with `application.properties`. 
+The Quarkus server port can be changed in the usual way, with `application.properties`.
+
+## Standalone React Development
+
+If you want to develop the React UI independently from the Quarkus server (e.g., for faster iteration on UI changes), you can run the backends via Docker Compose and the UI via npm.
+
+### Step 1: Start Backend Services
+
+From the repository root, start all backend services:
+
+```bash
+docker compose -f deploy/docker-compose/backends.yml up
+```
+
+This starts:
+- `rest-fights` at http://localhost:8082 (main API the UI calls)
+- `rest-heroes` at http://localhost:8083
+- `rest-villains` at http://localhost:8084
+- `rest-narration` at http://localhost:8087
+- `grpc-locations` at http://localhost:8089
+- `event-statistics` at http://localhost:8085
+- All required databases (MongoDB, PostgreSQL, MariaDB)
+- Kafka and Apicurio Registry
+
+The `backends.yml` file includes CORS configuration to allow requests from `http://localhost:3000`.
+
+### Step 2: Start the React UI
+
+Navigate to the React app directory and start the development server:
+
+```bash
+cd ui-super-heroes/src/main/webui
+npm install
+npm start
+```
+
+The React app will start at http://localhost:3000 and connect to the backend at http://localhost:8082.
+
+### Configuration
+
+The API base URL is configured in `public/env.js`:
+
+```javascript
+window.APP_CONFIG = {
+  API_BASE_URL: "http://localhost:8082",
+  CALCULATE_API_BASE_URL: false
+};
+```
+
+You can modify this file to point to a different backend URL if needed.
+
+### Stopping Services
+
+To stop the backend services:
+
+```bash
+docker compose -f deploy/docker-compose/backends.yml down
+```
 
 ## Integration with Microcks
 [Microcks](https://microcks.io) is an open source tool for API mocking and testing. It allows developers to turn an API contract or [Postman Collection](https://learning.postman.com/docs/getting-started/first-steps/creating-the-first-collection) into live mocks.
