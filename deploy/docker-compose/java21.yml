@@ -179,6 +179,8 @@ services:
       - "8087:8087"
     environment:
       QUARKUS_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: http://otel-collector:4317
+      QUARKUS_PROFILE: openai
+      QUARKUS_LANGCHAIN4J_OPENAI_API_KEY: ${OPENAI_API_KEY:-your-api-key-here}
     restart: on-failure
     networks:
       default:
