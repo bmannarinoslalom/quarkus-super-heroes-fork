@@ -1,5 +1,5 @@
 import React from "react";
-import {fireEvent, render, screen} from "@testing-library/react";
+import {fireEvent, render, screen, within} from "@testing-library/react";
 import App from "./App";
 import "@testing-library/jest-dom";
 import {act} from "react";
@@ -100,5 +100,92 @@ describe("renders the elements", () => {
     // There should be an extra row, which means an extra occurrence of the villain name
     const newWinners = screen.queryAllByText("Some villain")
     expect(newWinners).toHaveLength(winnerCount + 1)
+  })
+})
+
+describe("tabbed navigation", () => {
+  beforeEach(() => {
+    getRandomFighters.mockResolvedValue(fighters)
+    getRandomLocation.mockResolvedValue(location)
+    startFight.mockResolvedValue(fight)
+    getFights.mockResolvedValue([fight])
+  })
+
+  afterAll(() => {
+    jest.resetAllMocks()
+  })
+
+  it("renders tab navigation with Fight and Fight History tabs", async () => {
+    await act(async () => {
+      render(<App />)
+    })
+
+    expect(screen.getByRole("tablist")).toBeInTheDocument()
+    expect(screen.getByRole("tab", {name: /^Fight$/i})).toBeInTheDocument()
+    expect(screen.getByRole("tab", {name: /Fight History/i})).toBeInTheDocument()
+  })
+
+  it("shows Fight tab content by default", async () => {
+    await act(async () => {
+      render(<App />)
+    })
+
+    const fightTab = screen.getByRole("tab", {name: /^Fight$/i})
+    expect(fightTab).toHaveAttribute("aria-selected", "true")
+
+    // Fight content should be visible
+    expect(screen.getByText(/NEW FIGHTERS/i)).toBeVisible()
+  })
+
+  it("switches to Fight History tab when clicked", async () => {
+    await act(async () => {
+      render(<App />)
+    })
+
+    // Click on Fight History tab
+    await act(async () => {
+      fireEvent.click(screen.getByRole("tab", {name: /Fight History/i}))
+    })
+
+    const historyTab = screen.getByRole("tab", {name: /Fight History/i})
+    expect(historyTab).toHaveAttribute("aria-selected", "true")
+
+    // History content (the table) should be visible
+    const table = screen.getByRole("grid")
+    expect(table).toBeVisible()
+  })
+
+  it("hides Fight content when Fight History tab is selected", async () => {
+    await act(async () => {
+      render(<App />)
+    })
+
+    // Click on Fight History tab
+    await act(async () => {
+      fireEvent.click(screen.getByRole("tab", {name: /Fight History/i}))
+    })
+
+    // Fight content should be hidden - NEW FIGHTERS button should not be visible
+    expect(screen.getByText(/NEW FIGHTERS/i)).not.toBeVisible()
+  })
+
+  it("can switch back to Fight tab from Fight History", async () => {
+    await act(async () => {
+      render(<App />)
+    })
+
+    // Switch to history
+    await act(async () => {
+      fireEvent.click(screen.getByRole("tab", {name: /Fight History/i}))
+    })
+
+    // Switch back to fight
+    await act(async () => {
+      fireEvent.click(screen.getByRole("tab", {name: /^Fight$/i}))
+    })
+
+    const fightTab = screen.getByRole("tab", {name: /^Fight$/i})
+    expect(fightTab).toHaveAttribute("aria-selected", "true")
+    expect(screen.getByText(/NEW FIGHTERS/i)).toBeVisible()
   })
 })
