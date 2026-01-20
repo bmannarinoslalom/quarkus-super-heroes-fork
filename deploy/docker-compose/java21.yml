@@ -178,6 +178,8 @@ services:
     ports:
       - "8087:8087"
     environment:
+      QUARKUS_LANGCHAIN4J_OPENAI_ENABLE_INTEGRATION: "true"
+      QUARKUS_LANGCHAIN4J_OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       QUARKUS_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: http://otel-collector:4317
     restart: on-failure
     networks:
