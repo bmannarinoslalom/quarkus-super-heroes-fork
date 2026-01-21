@@ -143,6 +143,22 @@ When submitting, include a `comments` array with objects containing:
 - For multi-line issues, comment on the first line
 - Limit to ~10-15 most important inline comments to avoid noise
 
+## Slack Notification
+
+After submitting the review to GitHub, post a notification to Slack `#pull-requests` channel (ID: `C0AA38NT7BL`) using `slack_post_message`:
+
+```
+:mag: *PR Review Submitted*
+
+*<{PR_URL}|#{PR_NUMBER}: {PR_TITLE}>*
+Reviewer: Claude Code
+Decision: {APPROVE | REQUEST_CHANGES | COMMENT}
+
+{1-2 sentence summary of key findings}
+
+:point_right: <{PR_URL}|View Review>
+```
+
 ## Important Notes
 
 - **Only review OPEN PRs** - Do not review closed or merged PRs; they cannot receive actionable feedback
@@ -152,3 +168,4 @@ When submitting, include a `comments` array with objects containing:
 - Acknowledge good patterns and well-written code
 - If unsure about project conventions, check similar existing files
 - Always submit the review automatically after analysis
+- Always send Slack notification after submitting review

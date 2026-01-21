@@ -28,11 +28,9 @@ When you first use an Atlassian command, Claude Code will open a browser for OAu
 To enable Slack notifications for PR events:
 
 ```bash
-# Install the Slack MCP server
-pip install slack-mcp-server
-
-# Set your Slack bot token
+# Set your Slack bot token and team ID
 export SLACK_BOT_TOKEN="xoxb-your-bot-token"
+export SLACK_TEAM_ID="T01234567"  # Your workspace ID (from Slack URL)
 ```
 
 **Creating a Slack Bot:**
@@ -42,7 +40,8 @@ export SLACK_BOT_TOKEN="xoxb-your-bot-token"
    - `channels:read` - View channel info
 3. Install the app to your workspace
 4. Copy the **Bot User OAuth Token** (starts with `xoxb-`)
-5. Invite the bot to your notification channel: `/invite @YourBotName`
+5. Find your **Team ID** from your Slack workspace URL (e.g., `T0AA178HMPG`)
+6. Invite the bot to your notification channel: `/invite @YourBotName`
 
 ### 4. Verify Setup
 
@@ -167,7 +166,7 @@ If GitHub operations fail:
 ### Slack Issues
 
 If Slack notifications fail:
-1. Verify `SLACK_BOT_TOKEN` environment variable is set
+1. Verify `SLACK_BOT_TOKEN` and `SLACK_TEAM_ID` environment variables are set
 2. Check the bot is installed in your workspace
 3. Ensure the bot is invited to the target channel (`/invite @BotName`)
 4. Verify bot has `chat:write` and `channels:read` scopes
