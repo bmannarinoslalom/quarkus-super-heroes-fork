@@ -23,11 +23,32 @@ export GITHUB_TOKEN="your-github-token-here"
 
 When you first use an Atlassian command, Claude Code will open a browser for OAuth authentication. Follow the prompts to authorize access.
 
-### 3. Verify Setup
+### 3. Set Up Slack (Optional)
+
+To enable Slack notifications for PR events:
+
+```bash
+# Set your Slack bot token and team ID
+export SLACK_BOT_TOKEN="xoxb-your-bot-token"
+export SLACK_TEAM_ID="T01234567"  # Your workspace ID (from Slack URL)
+```
+
+**Creating a Slack Bot:**
+1. Go to [api.slack.com/apps](https://api.slack.com/apps) and create a new app
+2. Under **OAuth & Permissions**, add these Bot Token Scopes:
+   - `chat:write` - Send messages
+   - `channels:read` - View channel info
+3. Install the app to your workspace
+4. Copy the **Bot User OAuth Token** (starts with `xoxb-`)
+5. Find your **Team ID** from your Slack workspace URL (e.g., `T0AA178HMPG`)
+6. Invite the bot to your notification channel: `/invite @YourBotName`
+
+### 4. Verify Setup
 
 Run `/mcp` in Claude Code to verify your MCP servers are connected:
 - `github` - For PR operations, issues, code search
 - `atlassian-jira` - For JIRA tickets and Confluence pages
+- `slack` - For Slack notifications (optional)
 
 ## Available Skills
 
@@ -52,6 +73,17 @@ Reviews a pull request against project standards:
 4. Uses severity indicators: 🔴 critical, 🟡 important, 💡 suggestion
 
 **Example:** `/review-pr 5`
+
+### `/notify-pr <PR-NUMBER>`
+
+Sends a Slack notification about a PR to the #pull-requests channel:
+1. Fetches PR details from GitHub
+2. Formats a rich message based on PR state (open, merged, closed)
+3. Posts to the configured Slack channel
+
+**Example:** `/notify-pr 5`
+
+**Note:** Requires Slack MCP to be configured (see setup instructions above).
 
 ## Project Conventions
 
@@ -131,9 +163,17 @@ If GitHub operations fail:
 2. Check the token has required permissions: `repo`, `read:org`, `read:user`
 3. Regenerate the token if expired
 
+### Slack Issues
+
+If Slack notifications fail:
+1. Verify `SLACK_BOT_TOKEN` and `SLACK_TEAM_ID` environment variables are set
+2. Check the bot is installed in your workspace
+3. Ensure the bot is invited to the target channel (`/invite @BotName`)
+4. Verify bot has `chat:write` and `channels:read` scopes
+
 ## Security Notes
 
 - **Never commit** `.mcp.json` (contains credentials)
 - **Never commit** API keys or tokens in code
 - Use environment variables for all secrets
-- The `.mcp.json.example` uses `${GITHUB_TOKEN}` syntax for environment variable substitution
+- The `.mcp.json.example` uses `${GITHUB_TOKEN}` and `${SLACK_BOT_TOKEN}` syntax for environment variable substitution

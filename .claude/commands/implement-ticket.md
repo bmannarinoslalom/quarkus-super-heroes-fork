@@ -16,6 +16,7 @@ Read JIRA ticket $ARGUMENTS and implement it end-to-end.
    - Push branch
    - Create PR linking to the ticket
    - Add comment to JIRA with the PR link
+   - **Post Slack notification** to `#pull-requests` channel (see below)
 8. **If tests fail**: Fix and retry (max 3 attempts), then report
 
 ## Testing Requirements
@@ -34,5 +35,22 @@ Read JIRA ticket $ARGUMENTS and implement it end-to-end.
 - Integration tests: `src/test/java/.../SomethingIT.java` (uses `@QuarkusTest`)
 - Config validation tests: Use `@ConfigProperty` injection and assert expected values
 - REST endpoint tests: Use REST Assured with `@QuarkusTest`
+
+## Slack Notification
+
+After creating the PR, post a notification to Slack `#pull-requests` channel (ID: `C0AA38NT7BL`) using `slack_post_message`:
+
+```
+:rocket: *New PR Created*
+
+*<{PR_URL}|#{PR_NUMBER}: {PR_TITLE}>*
+Author: {author}
+Branch: `{head}` → `{base}`
+JIRA: <{JIRA_URL}|{TICKET_ID}>
+
+{Brief description of changes}
+
+:point_right: <{PR_URL}|Review this PR>
+```
 
 Always ask for confirmation before pushing or creating the PR.
