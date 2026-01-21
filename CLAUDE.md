@@ -138,6 +138,33 @@ Starts or stops the local development environment using Docker Compose:
 /start-local status       # Check what's running
 ```
 
+### `/check-build [MODULE] [FLAGS]`
+
+Verifies the build passes before creating a PR:
+1. Detects changed modules based on git diff
+2. Runs Maven verify on affected modules
+3. Reports compilation errors with file and line numbers
+4. Reports test failures with details
+5. Shows build time and summary
+
+**Arguments:**
+- Empty: Verify modules with uncommitted changes
+- `all`: Verify entire project
+- Service name: `rest-heroes`, `rest-villains`, etc.
+
+**Flags:**
+- `--skip-tests` or `-st`: Compile only, skip tests
+- `--fail-fast` or `-ff`: Stop on first failure (default)
+- `--continue` or `-c`: Continue on failures, report all errors
+
+**Examples:**
+```
+/check-build              # Verify changed modules
+/check-build all          # Verify entire project
+/check-build rest-heroes  # Verify specific module
+/check-build --skip-tests # Compile only
+```
+
 ### `/sync-docs [SCOPE]`
 
 Updates Confluence documentation to reflect recent changes in the codebase:
