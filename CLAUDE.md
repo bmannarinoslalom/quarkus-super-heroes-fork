@@ -110,6 +110,56 @@ Runs tests for the project and reports results:
 /run-tests rest-fights -it    # Integration tests only
 ```
 
+### `/start-local [PROFILE]`
+
+Starts or stops the local development environment using Docker Compose:
+1. Checks Docker is running
+2. Starts requested services based on profile
+3. Waits for services to be healthy
+4. Displays service status and URLs
+
+**Profiles:**
+- Empty or `full` - Start all backend services (databases, Kafka, microservices)
+- `databases` - Start only databases (PostgreSQL, MongoDB, MariaDB)
+- `infrastructure` - Start databases + Kafka + Apicurio
+- `monitoring` - Start observability stack (Prometheus, Jaeger, OpenTelemetry)
+- `all` - Start everything including monitoring
+
+**Commands:**
+- `stop` - Stop all running containers
+- `status` - Show status of running containers
+- `logs [service]` - Show logs for a service
+
+**Examples:**
+```
+/start-local              # Start full backend stack
+/start-local databases    # Start only databases for local Quarkus dev
+/start-local stop         # Stop all containers
+/start-local status       # Check what's running
+```
+
+### `/sync-docs [SCOPE]`
+
+Updates Confluence documentation to reflect recent changes in the codebase:
+1. Detects what changed (auto-detect or specify scope)
+2. Regenerates architecture diagrams using Mermaid MCP
+3. Updates relevant Confluence pages
+4. Commits and pushes diagram changes
+
+**Scopes:**
+- `all` - Update all documentation
+- `architecture` - Update architecture diagrams and service details
+- `claude` - Update Claude Code integration docs
+- `deployment` - Update deployment architecture docs
+- (empty) - Auto-detect based on recent commits
+
+**Examples:**
+```
+/sync-docs              # Auto-detect and update affected docs
+/sync-docs architecture # Update only architecture docs
+/sync-docs claude       # Update only Claude Code docs
+```
+
 ## Project Conventions
 
 When working on this codebase, Claude should follow these conventions:
