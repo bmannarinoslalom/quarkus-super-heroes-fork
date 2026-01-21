@@ -85,6 +85,31 @@ Sends a Slack notification about a PR to the #pull-requests channel:
 
 **Note:** Requires Slack MCP to be configured (see setup instructions above).
 
+### `/run-tests [SERVICE] [FLAGS]`
+
+Runs tests for the project and reports results:
+1. Detects changed modules (or uses specified service)
+2. Runs Maven tests with appropriate flags
+3. Parses test results and displays summary
+4. Shows failed test details with file locations
+
+**Arguments:**
+- Empty: Run tests for modules with uncommitted changes
+- Service name: `rest-heroes`, `rest-villains`, `rest-fights`, `rest-narration`, `grpc-locations`, `event-statistics`
+- `all`: Run tests for all modules
+
+**Flags:**
+- `-it` or `--integration`: Run only integration tests
+- `-ut` or `--unit`: Run only unit tests
+
+**Examples:**
+```bash
+/run-tests                    # Test changed modules
+/run-tests rest-heroes        # Test hero service
+/run-tests all                # Test everything
+/run-tests rest-fights -it    # Integration tests only
+```
+
 ## Project Conventions
 
 When working on this codebase, Claude should follow these conventions:
