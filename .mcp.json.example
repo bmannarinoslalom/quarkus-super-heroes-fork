@@ -19,6 +19,10 @@
         "SLACK_BOT_TOKEN": "${SLACK_BOT_TOKEN}",
         "SLACK_TEAM_ID": "${SLACK_TEAM_ID}"
       }
+    },
+    "mermaid": {
+      "command": "npx",
+      "args": ["-y", "@peng-shawn/mermaid-mcp-server"]
     }
   }
 }

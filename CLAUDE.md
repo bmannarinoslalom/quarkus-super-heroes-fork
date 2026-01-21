@@ -49,6 +49,7 @@ Run `/mcp` in Claude Code to verify your MCP servers are connected:
 - `github` - For PR operations, issues, code search
 - `atlassian-jira` - For JIRA tickets and Confluence pages
 - `slack` - For Slack notifications (optional)
+- `mermaid` - For generating architecture diagrams
 
 ## Available Skills
 
@@ -186,6 +187,12 @@ Updates Confluence documentation to reflect recent changes in the codebase:
 /sync-docs architecture # Update only architecture docs
 /sync-docs claude       # Update only Claude Code docs
 ```
+
+**When to run:**
+- After major code changes (new services, renamed components)
+- After architecture changes (new databases, messaging patterns)
+- After Claude Code config changes (new MCP servers, new skills)
+- After deployment config changes (Docker/K8s updates)
 
 ## Project Conventions
 
