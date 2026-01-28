@@ -65,6 +65,20 @@ Implements a JIRA ticket end-to-end:
 
 **Example:** `/implement-ticket SCRUM-123`
 
+### `/create-story [TITLE]`
+
+Interactively creates a well-structured JIRA story with implementation details:
+1. Gathers feature requirements through prompts
+2. Identifies affected modules (rest-heroes, rest-villains, etc.)
+3. Explores codebase to understand existing patterns and architecture
+4. Drafts story with acceptance criteria, technical approach, and testing requirements
+5. Reviews draft with user before creating
+6. Creates the story in JIRA (SCRUM project)
+
+The resulting ticket contains enough detail for `/implement-ticket SCRUM-XXX` to execute.
+
+**Example:** `/create-story Add independent hero and villain refresh buttons`
+
 ### `/review-pr <PR-NUMBER>`
 
 Reviews a pull request against project standards:
