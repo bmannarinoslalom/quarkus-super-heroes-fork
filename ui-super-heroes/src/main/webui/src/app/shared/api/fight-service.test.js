@@ -1,4 +1,4 @@
-import {generateImage, getFights, getRandomFighters, getRandomLocation, narrateFight, startFight} from "./fight-service"
+import {generateImage, getFights, getRandomFighters, getRandomHero, getRandomVillain, getRandomLocation, narrateFight, startFight} from "./fight-service"
 import axios from "axios"
 
 jest.mock('axios')
@@ -139,6 +139,78 @@ describe("the fight service", () => {
 
       it("gets new fighters", async () => {
         const answer = await getRandomFighters({})
+        expect(answer).toBeUndefined()
+      })
+    })
+  })
+
+  describe("getting random hero", () => {
+
+    beforeEach(() => {
+      axios.get.mockResolvedValue(fightersResponse)
+    })
+
+    afterEach(() => {
+      jest.resetAllMocks()
+    })
+
+    it("invokes the remote api", async () => {
+      await getRandomHero()
+      expect(axios.get).toHaveBeenCalled()
+    })
+
+    it("returns only the hero", async () => {
+      const answer = await getRandomHero()
+      expect(answer).toStrictEqual(fightersData.hero)
+    })
+
+    describe("when back-end services are missing", () => {
+      beforeEach(() => {
+        axios.get.mockRejectedValue(new Error('Deliberate error: No Java services available'))
+      })
+
+      afterEach(() => {
+        jest.resetAllMocks()
+      })
+
+      it("returns undefined", async () => {
+        const answer = await getRandomHero()
+        expect(answer).toBeUndefined()
+      })
+    })
+  })
+
+  describe("getting random villain", () => {
+
+    beforeEach(() => {
+      axios.get.mockResolvedValue(fightersResponse)
+    })
+
+    afterEach(() => {
+      jest.resetAllMocks()
+    })
+
+    it("invokes the remote api", async () => {
+      await getRandomVillain()
+      expect(axios.get).toHaveBeenCalled()
+    })
+
+    it("returns only the villain", async () => {
+      const answer = await getRandomVillain()
+      expect(answer).toStrictEqual(fightersData.villain)
+    })
+
+    describe("when back-end services are missing", () => {
+      beforeEach(() => {
+        axios.get.mockRejectedValue(new Error('Deliberate error: No Java services available'))
+      })
+
+      afterEach(() => {
+        jest.resetAllMocks()
+      })
+
+      it("returns undefined", async () => {
+        const answer = await getRandomVillain()
         expect(answer).toBeUndefined()
       })
     })

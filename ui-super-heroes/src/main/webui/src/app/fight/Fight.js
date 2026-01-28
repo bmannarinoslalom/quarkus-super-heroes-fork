@@ -1,4 +1,4 @@
-import {generateImage, getRandomFighters, getRandomLocation, narrateFight, startFight} from "../shared/api/fight-service"
+import {generateImage, getRandomFighters, getRandomHero, getRandomVillain, getRandomLocation, narrateFight, startFight} from "../shared/api/fight-service"
 import {useEffect, useState} from "react"
 import {faComment} from "@fortawesome/free-solid-svg-icons"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
@@ -16,6 +16,24 @@ function Fight({onFight}) {
     trackPromise(
         getRandomFighters().then(answer => {
           setFighters(answer)
+          clearPreviousFight()
+        })
+    )
+  }
+
+  const newHero = () => {
+    trackPromise(
+        getRandomHero().then(answer => {
+          setFighters(prev => ({...prev, hero: answer}))
+          clearPreviousFight()
+        })
+    )
+  }
+
+  const newVillain = () => {
+    trackPromise(
+        getRandomVillain().then(answer => {
+          setFighters(prev => ({...prev, villain: answer}))
           clearPreviousFight()
         })
     )
@@ -115,6 +133,12 @@ function Fight({onFight}) {
             <div className="card-pf-body">
               <button onClick={newFighters} className="btn btn-primary btn-block btn-lg">
                 <h4><i className="fas fa-random"></i> NEW FIGHTERS</h4>
+              </button>
+              <button onClick={newHero} className="btn btn-primary btn-block btn-lg">
+                <h4><i className="fas fa-random"></i> NEW HERO</h4>
+              </button>
+              <button onClick={newVillain} className="btn btn-primary btn-block btn-lg">
+                <h4><i className="fas fa-random"></i> NEW VILLAIN</h4>
               </button>
               <button onClick={newLocation} className="btn btn-primary btn-block btn-lg">
                 <h4><i className="fas fa-random"></i> NEW LOCATION </h4>

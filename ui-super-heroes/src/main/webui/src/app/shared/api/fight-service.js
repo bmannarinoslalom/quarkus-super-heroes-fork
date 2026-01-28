@@ -93,6 +93,38 @@ export async function getRandomFighters() {
 }
 
 /**
+ * Returns a random hero (fetches fighters and returns only the hero)
+ */
+export async function getRandomHero() {
+  try {
+    const response = await axios.get(`${basePath}/api/fights/randomfighters`,
+      {
+        headers: defaultHeaders,
+      }
+    )
+    return response.data?.hero
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+/**
+ * Returns a random villain (fetches fighters and returns only the villain)
+ */
+export async function getRandomVillain() {
+  try {
+    const response = await axios.get(`${basePath}/api/fights/randomfighters`,
+      {
+        headers: defaultHeaders,
+      }
+    )
+    return response.data?.villain
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+/**
  * Generations a narration, given a pre-built fight
  *
  * @param body a fight

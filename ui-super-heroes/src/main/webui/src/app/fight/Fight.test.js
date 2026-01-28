@@ -2,7 +2,7 @@ import React from "react"
 import {fireEvent, render, screen} from "@testing-library/react"
 import "@testing-library/jest-dom"
 import Fight from "./Fight"
-import {generateImage, getRandomFighters, getRandomLocation, narrateFight, startFight} from "../shared/api/fight-service"
+import {generateImage, getRandomFighters, getRandomHero, getRandomVillain, getRandomLocation, narrateFight, startFight} from "../shared/api/fight-service"
 import {act} from "react"
 
 jest.mock("../shared/api/fight-service")
@@ -96,6 +96,8 @@ describe("the fight visualisation", () => {
       expect(screen.getByText(fighters.hero.name)).toBeInTheDocument()
       expect(screen.getByText(fighters.villain.name)).toBeInTheDocument()
       expect(screen.getByText(/NEW FIGHTERS/i)).toBeInTheDocument()
+      expect(screen.getByText(/NEW HERO/i)).toBeInTheDocument()
+      expect(screen.getByText(/NEW VILLAIN/i)).toBeInTheDocument()
       expect(screen.getByText(/NEW LOCATION/i)).toBeInTheDocument()
       expect(screen.queryByText(/NARRATE THE FIGHT/i)).not.toBeInTheDocument()
       expect(screen.queryByText(/GENERATE NARRATION IMAGE/i)).not.toBeInTheDocument()
@@ -208,6 +210,115 @@ describe("the fight visualisation", () => {
       })
 
       expect(onFight).toHaveBeenCalled()
+    })
+
+    describe("independent fighter refresh buttons", () => {
+      const newHero = {
+        name: 'New Random Hero',
+        level: 99,
+        picture: 'https://dummyimage.com/240x320/1e8fff/ffffff&text=New+Hero',
+        powers: 'New hero powers'
+      }
+
+      const newVillain = {
+        name: 'New Random Villain',
+        level: 88,
+        picture: 'https://dummyimage.com/240x320/b22222/ffffff&text=New+Villain',
+        powers: 'New villain powers'
+      }
+
+      beforeEach(() => {
+        getRandomHero.mockResolvedValue(newHero)
+        getRandomVillain.mockResolvedValue(newVillain)
+      })
+
+      it("renders NEW HERO button", async () => {
+        await act(async () => {
+          render(<Fight onFight={onFight}/>)
+        })
+        expect(screen.getByText(/NEW HERO/i)).toBeInTheDocument()
+      })
+
+      it("renders NEW VILLAIN button", async () => {
+        await act(async () => {
+          render(<Fight onFight={onFight}/>)
+        })
+        expect(screen.getByText(/NEW VILLAIN/i)).toBeInTheDocument()
+      })
+
+      it("updates only hero when NEW HERO is clicked", async () => {
+        await act(async () => {
+          render(<Fight onFight={onFight}/>)
+        })
+
+        // Verify initial state
+        expect(screen.getByText(fighters.hero.name)).toBeInTheDocument()
+        expect(screen.getByText(fighters.villain.name)).toBeInTheDocument()
+
+        await act(async () => {
+          fireEvent.click(screen.getByText(/NEW HERO/i))
+        })
+
+        // Hero should be updated, villain should remain
+        expect(getRandomHero).toHaveBeenCalled()
+        expect(screen.getByText(newHero.name)).toBeInTheDocument()
+        expect(screen.getByText(fighters.villain.name)).toBeInTheDocument()
+      })
+
+      it("updates only villain when NEW VILLAIN is clicked", async () => {
+        await act(async () => {
+          render(<Fight onFight={onFight}/>)
+        })
+
+        // Verify initial state
+        expect(screen.getByText(fighters.hero.name)).toBeInTheDocument()
+        expect(screen.getByText(fighters.villain.name)).toBeInTheDocument()
+
+        await act(async () => {
+          fireEvent.click(screen.getByText(/NEW VILLAIN/i))
+        })
+
+        // Villain should be updated, hero should remain
+        expect(getRandomVillain).toHaveBeenCalled()
+        expect(screen.getByText(fighters.hero.name)).toBeInTheDocument()
+        expect(screen.getByText(newVillain.name)).toBeInTheDocument()
+      })
+
+      it("clears fight results when NEW HERO is clicked", async () => {
+        await act(async () => {
+          render(<Fight onFight={onFight}/>)
+        })
+
+        // First trigger a fight to get results
+        await act(async () => {
+          fireEvent.click(screen.getByText(/FIGHT !/i))
+        })
+        expect(screen.getByText(/Winner is/i)).toBeInTheDocument()
+
+        // Click NEW HERO should clear fight results
+        await act(async () => {
+          fireEvent.click(screen.getByText(/NEW HERO/i))
+        })
+        expect(screen.queryByText(/Winner is/i)).not.toBeInTheDocument()
+      })
+
+      it("clears fight results when NEW VILLAIN is clicked", async () => {
+        await act(async () => {
+          render(<Fight onFight={onFight}/>)
+        })
+
+        // First trigger a fight to get results
+        await act(async () => {
+          fireEvent.click(screen.getByText(/FIGHT !/i))
+        })
+        expect(screen.getByText(/Winner is/i)).toBeInTheDocument()
+
+        // Click NEW VILLAIN should clear fight results
+        await act(async () => {
+          fireEvent.click(screen.getByText(/NEW VILLAIN/i))
+        })
+        expect(screen.queryByText(/Winner is/i)).not.toBeInTheDocument()
+      })
     })
   })
 })
