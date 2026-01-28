@@ -6,7 +6,9 @@ export function FightList({fights}) {
           <th role="columnheader" className="fight-list-header thead-dark">Id</th>
           <th role="columnheader" className="fight-list-header thead-dark">Fight Date</th>
           <th role="columnheader" className="fight-list-header thead-dark">Winner</th>
+          <th role="columnheader" className="fight-list-header thead-dark">Winner Level</th>
           <th role="columnheader" className="fight-list-header thead-dark">Loser</th>
+          <th role="columnheader" className="fight-list-header thead-dark">Loser Level</th>
           <th role="columnheader" className="fight-list-header thead-dark">Location</th>
         </tr>
       </thead>
@@ -17,7 +19,9 @@ export function FightList({fights}) {
           <td role="cell" data-label="Id" className="fight-list-cell"> {element.id} </td>
           <td role="cell" data-label="Fight Date" className="fight-list-cell"> {element.fightDate} </td>
           <td role="cell" data-label="Winner" className="fight-list-cell"> {element.winnerName} </td>
+          <td role="cell" data-label="Winner Level" className="fight-list-cell"> {element.winnerLevel} </td>
           <td role="cell" data-label="Loser" className="fight-list-cell"> {element.loserName} </td>
+          <td role="cell" data-label="Loser Level" className="fight-list-cell"> {element.loserLevel} </td>
           <td role="cell" data-label="Location" className="fight-list-cell"><a href={element?.location?.picture}>{element?.location?.name}</a></td>
         </tr>))}
       </tbody>
