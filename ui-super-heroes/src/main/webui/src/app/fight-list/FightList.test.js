@@ -46,12 +46,14 @@ describe("the fight list", () => {
     const headRows = within(thead).getAllByRole("rowheader")
     const headCols = within(headRows[0]).getAllByRole("columnheader")
 
-    expect(headCols).toHaveLength(5)
+    expect(headCols).toHaveLength(7)
     expect(headCols[0]).toHaveTextContent("Id")
     expect(headCols[1]).toHaveTextContent("Fight Date")
     expect(headCols[2]).toHaveTextContent("Winner")
-    expect(headCols[3]).toHaveTextContent("Loser")
-    expect(headCols[4]).toHaveTextContent("Location")
+    expect(headCols[3]).toHaveTextContent("Winner Level")
+    expect(headCols[4]).toHaveTextContent("Loser")
+    expect(headCols[5]).toHaveTextContent("Loser Level")
+    expect(headCols[6]).toHaveTextContent("Location")
   })
 
   it("renders rows for the fights", async () => {
@@ -64,12 +66,14 @@ describe("the fight list", () => {
     const bodyRows = within(tbody).getAllByRole('row');
     const rowCols = within(bodyRows[0]).getAllByRole("cell")
 
-    expect(rowCols).toHaveLength(5)
+    expect(rowCols).toHaveLength(7)
     expect(rowCols[0]).toHaveTextContent(fight.id)
     expect(rowCols[1]).toHaveTextContent(fight.fightDate)
     expect(rowCols[2]).toHaveTextContent(fight.winnerName)
-    expect(rowCols[3]).toHaveTextContent(fight.loserName)
-    expect(rowCols[4]).toHaveTextContent(fight.location.name)
+    expect(rowCols[3]).toHaveTextContent(fight.winnerLevel)
+    expect(rowCols[4]).toHaveTextContent(fight.loserName)
+    expect(rowCols[5]).toHaveTextContent(fight.loserLevel)
+    expect(rowCols[6]).toHaveTextContent(fight.location.name)
     expect(screen.getByText(fight.location.name).closest("a")).toHaveAttribute("href", fight.location.picture)
   })
 })
