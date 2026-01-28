@@ -18,7 +18,7 @@ Read JIRA ticket $ARGUMENTS and implement it end-to-end.
 8. **If tests pass**:
    - Commit with message: `feat(scope): description [$ARGUMENTS]` (or `fix(scope):` for bugs)
    - Push branch
-   - Create PR linking to the ticket
+   - Create PR following the PR Template (see PR Description Format below)
    - Add comment to JIRA with the PR link
    - **⚠️ REQUIRED: Post Slack notification** to `#pull-requests` channel (see Slack Notification section below) — DO NOT skip this step!
 9. **If tests fail**: Fix and retry (max 3 attempts), then report
@@ -73,6 +73,43 @@ Before creating a PR, verify:
 - [ ] CLAUDE.md is updated if Claude Code behavior changes
 - [ ] Code comments are added for complex logic
 - [ ] OpenAPI annotations are complete for REST endpoints
+
+## PR Description Format
+
+Follow the template in `.github/PULL_REQUEST_TEMPLATE.md`. The PR body must include:
+
+```markdown
+## Summary
+
+- Brief bullet points describing what this PR does
+
+## JIRA
+
+[{TICKET_ID}](https://mcpdemo.atlassian.net/browse/{TICKET_ID})
+
+## Changes
+
+### Files Modified
+- `path/to/file` — description of changes
+
+## Test Plan
+
+- [x] Unit tests added/updated
+- [x] All existing tests pass
+
+### Manual Verification Steps
+1. Step to verify the change works
+
+## Checklist
+
+- [x] Code follows project conventions
+- [x] Tests cover the new functionality
+
+---
+Generated with [Claude Code](https://claude.ai/claude-code)
+```
+
+**Important:** When using the GitHub MCP `create_pull_request` tool, the body parameter must use actual newlines, not escaped `\n` characters.
 
 ## Slack Notification
 
